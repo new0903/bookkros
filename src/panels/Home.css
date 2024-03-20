@@ -1,0 +1,27 @@
+.books {
+    width: 100%;
+    height: max-content;
+    margin: 16px 0;
+  }
+  
+.book-list{
+    display: grid;
+    backface-visibility: hidden;
+    will-change: transform;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(130px, max-content)
+    );
+    margin: 0 12px 12px 12px;
+    gap: 12px;
+}
+.BookCard {
+    width: 100%;
+    max-width: var(220px);
+    cursor: pointer;
+    border: 1px solid var(--vkui--color_field_border_alpha);
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
