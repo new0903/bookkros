@@ -8,15 +8,15 @@ const TabBar = (activePanel)=>  {
 	const routeNavigator = useRouteNavigator()
     return (
     <Tabbar >
-        <TabbarItem text='Главный экран'  onClick={()=>{ routeNavigator.push('/')}}
+        <TabbarItem text='Взять'  onClick={()=>{ routeNavigator.push('/')}}
             selected={activePanel=="home"}
             >
             <Icon24Home fill="#447bba"/>
         </TabbarItem>
-        <TabbarItem text='Список книг'  onClick={()=>{routeNavigator.push('/')}} selected={activePanel=="home"}>
+        <TabbarItem text='Ваши книги'  onClick={()=>{routeNavigator.push('/')}} selected={activePanel=="home"}>
             <Icon24BookSpreadOutline fill="#447bba"/>
         </TabbarItem>
-        <TabbarItem text='Найти книгу'  onClick={()=>{routeNavigator.push('/')
+        <TabbarItem text='Геолокация'  onClick={()=>{routeNavigator.push('/')
                 }}
                 selected={activePanel=="home"}
                 >

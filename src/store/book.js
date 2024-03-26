@@ -12,6 +12,6 @@ $books.on(createBookFx.doneData, (books, newBook) => [...books, newBook]);
 
 $books.on(getBookFx.doneData, (_, books) => books);
 
-$books.on(filterBooks, (books, bookId) => books.filter((book) => book.id !== bookId));
+$books.on(filterBooks, (books, bookId) => books.filter((book) => book.id == bookId));
 
 $bookId.on(setBookId, (_, bookId) => bookId);
