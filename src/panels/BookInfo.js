@@ -123,7 +123,7 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                         <div style={{ display: "flex", margin: "5px" }}>
 
                                             <Icon24HammerOutline fill='#447bba' onClick={() => {
-                                                routeNavigator.push(`/EditPlace?id=${selectBook.id}`)
+                                                routeNavigator.push(`/editBook?id=${selectBook.id}`)
                                             }} />
                                             редактировать книгу
                                         </div>
@@ -146,6 +146,8 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                             return (`${janer.name}, `)
                                         })}
                                     </div>
+
+
                                     {/* <div style={{ display: "flex", margin: "5px" }}>
                                         дата создания поста: {selectBook.dateCreate}
                                     </div>  */}

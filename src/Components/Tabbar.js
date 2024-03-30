@@ -13,12 +13,12 @@ const TabBar = (activePanel)=>  {
             >
             <Icon24Home fill="#447bba"/>
         </TabbarItem>
-        <TabbarItem text='Ваши книги'  onClick={()=>{routeNavigator.push('/')}} selected={activePanel=="home"}>
+        <TabbarItem text='Ваши книги'  onClick={()=>{routeNavigator.push('/userBook')}} selected={activePanel=="userBook"}>
             <Icon24BookSpreadOutline fill="#447bba"/>
         </TabbarItem>
-        <TabbarItem text='Геолокация'  onClick={()=>{routeNavigator.push('/')
+        <TabbarItem text='Геолокация'  onClick={()=>{routeNavigator.push('/locationuser')
                 }}
-                selected={activePanel=="home"}
+                selected={activePanel=="locationuser"}
                 >
             <Icon24Home fill="#447bba" />
         </TabbarItem>

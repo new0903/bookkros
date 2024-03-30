@@ -11,7 +11,7 @@ export const getJaner = createEffect( async (idUser) => {
 export const getTowns= createEffect( async (idUser) => {
     const {data} = await api.get('api/gettowns');
     console.log(data)
-    return data.response;
+    return data.towns;
 });
 
 export const getAutors= createEffect( async (idUser) => {

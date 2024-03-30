@@ -17,6 +17,7 @@ export const DEFAULT_VIEW_PANELS = {
   EDITBOOK: 'editBook',
   LOCATIONUSER: 'locationuser',
   PERSIK: 'persik',
+  USERBOOK: 'userBook',
 };
 
 export const routes = RoutesConfig.create([
@@ -26,6 +27,8 @@ export const routes = RoutesConfig.create([
       createPanel(DEFAULT_VIEW_PANELS.BOOKINFO, `/${DEFAULT_VIEW_PANELS.BOOKINFO}`, []),
       createPanel(DEFAULT_VIEW_PANELS.EDITBOOK, `/${DEFAULT_VIEW_PANELS.EDITBOOK}`, []),
       createPanel(DEFAULT_VIEW_PANELS.CREATEBOOK, `/${DEFAULT_VIEW_PANELS.CREATEBOOK}`, []),
+      createPanel(DEFAULT_VIEW_PANELS.USERBOOK, `/${DEFAULT_VIEW_PANELS.USERBOOK}`, []),
+      createPanel(DEFAULT_VIEW_PANELS.LOCATIONUSER, `/${DEFAULT_VIEW_PANELS.LOCATIONUSER}`, []),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, []),
     ]),
   ]),

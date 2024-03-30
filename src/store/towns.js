@@ -1,6 +1,6 @@
 import { createEvent, createStore } from "effector";
 import { api } from "../api/axiosInstance";
-import { getJaner, getTowns } from "../api/janer";
+import { getTowns } from "../api/requests";
 
 export const $towns = createStore([]);
 

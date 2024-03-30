@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Select, Panel } from '@vkontakte/vkui';
+import {
+    Panel,
+    CustomSelect,
+    CustomSelectOption,
+    Div,
+    Group,
+    Button
+} from '@vkontakte/vkui'
+import { getTowns } from '../api/requests';
+import { setUserServerTown } from '../api/user';
+import { useUnit } from 'effector-react';
+import { $userServer } from '../store/user';
+import { $towns } from '../store/towns';
 
 // просто пример, города нужно будет взять, пока не знаю где
 const cities = [
@@ -15,14 +27,70 @@ const cities = [
     { id: 10, name: 'Краснодар' }
 ];
 
-function Location({ id, fetchedUser }) {
-    const [selectedCity, setSelectedCity] = useState(null);
+export function Location({ id, fetchedUser }) {
+    //const [towns, userServer] = useUnit([$towns, $userServer]);
 
-    const handleCityChange = (event) => {
-        setSelectedCity(event.target.value);
-        console.log('Выбран город:', event.target.value);
-        // тут можно обрабатывать выбор города 
+    const [value, setValue] = React.useState('');
+    const [query, setQuery] = React.useState('');
+
+    const [cities, setCities] = React.useState([
+    ]);
+
+    const [selectedCity, setSelectedCity] = React.useState([]);
+    React.useEffect(() => {
+        const getTown = async () => {
+            const t = await getTowns();
+            setSelectedCity(t)
+            console.log(t)
+           // console.log(towns)
+
+        }
+        getTown()
+    }, []);
+    const customSearchOptions = () => {
+        console.log(3)
+        const options = [...selectedCity];
+        if (query.length > 0 && !options.find((town) => town.label === query)) {
+            options.unshift({
+                label: `Добавить город ${query}`,
+                value: '0',
+            });
+            ///axios
+        }
+        return options;
     };
+
+    const onCustomSearchChange = (e) => {
+        console.log(1)
+        if (e.target.value === '0') {
+            setSelectedCity([...selectedCity, { label: query, value: query }]);
+            setValue(query);
+            console.log(query)
+            // addTowns(query)
+        } else {
+            setValue(e.target.value);
+            console.log(e.target.value)
+        }
+        setQuery('');
+    };
+    const onCustomSearchInputChange = (e) => {
+        console.log(2)
+        console.log(e.target.value)
+        setQuery(e.target.value);
+    };
+
+    const customSearchFilter = (value, option) =>
+        option.label.toLowerCase().includes(value.toLowerCase());
+
+
+    const setUserTown =async (value)=>{
+        const data={
+            id: fetchedUser.id,
+            town: value
+        }
+        console.log(data)
+        //setUserServerTown(data);
+    }
 
     return (
         <>
@@ -37,13 +105,44 @@ function Location({ id, fetchedUser }) {
                     backgroundSize: 'cover',
                     zIndex: -1
                 }} />
-                <Select
-                    id="citySelect"
-                    placeholder="Выберите город"
-                    value={selectedCity}
-                    onChange={handleCityChange}
-                    options={cities.map(city => ({ value: city.name, label: city.name }))}
-                />
+
+                <Div>
+                    <Group style={{ marginBottom: "50px" }}>
+
+
+                        {selectedCity.length > 0 &&
+                            <CustomSelect
+                                value={value}
+                                placeholder="Введите название города"
+                                searchable
+                                options={customSearchOptions()}
+                                onInputChange={onCustomSearchInputChange}
+                                autoHideScrollbar
+                                renderOption={({ option, ...restProps }) => (
+                                    <CustomSelectOption
+                                        style={option.value === '0' ? { color: 'var(--vkui--color_background_accent)' } : {}}
+                                        {...restProps}
+                                    >
+                                        {option.label}
+                                    </CustomSelectOption>
+                                )}
+                                onChange={onCustomSearchChange}
+                            />}
+                        <Button
+                            size="l"
+                            mode="primary"
+
+                            onClick={() => {
+
+                                setUserTown(value)
+                            }}
+                        >
+                            Перейти в приложение
+                        </Button>
+
+
+                    </Group>
+                </Div>
             </Panel>
         </>
     );

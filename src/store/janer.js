@@ -1,6 +1,6 @@
 import { createEvent, createStore } from "effector";
 import { api } from "../api/axiosInstance";
-import { getJaner } from "../api/janer";
+import { getJaner } from "../api/requests";
 
 export const $janers = createStore([]);
 
