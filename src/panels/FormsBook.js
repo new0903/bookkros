@@ -143,17 +143,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
             {fetchedUser &&
                 <Group>
                     <Div>
-
                         {fetchedUser.id == book.userInfo.id ? (<FormLayoutGroup>
-
-                            <FormItem top="ISBN книги" >
-                                <Input
-                                    type="text"
-                                    align="left"
-                                    defaultValue={ISBN}
-                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
-
-                            </FormItem>
                             <FormItem top="Название книги">
                                 <Input
                                     type="text"
@@ -168,33 +158,11 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                                     defaultValue={autor}
                                     placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
                             </FormItem>
-                            <FormItem top="Описание книги ">
-                                <Textarea placeholder="описание"
-                                    defaultValue={description}
-                                    onChange={(e) => {
-                                        setDescription(e.target.value)
-                                        console.log(e.target.value);
-                                    }}
-                                />
-                            </FormItem>
-
-
                             <ChipsSelectJaner currendJaners={janer} setJaners={setJaners} />
-                            <FormItem>
-                                <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
-                                    setDamaged(e.target.checked)
-                                    console.log(e.target.checked)
-                                }}>в книге есть повреждения</Checkbox>
-
-
-                            </FormItem>
-                            <FormItem top="Загрузите ваше фото">
-
-
+                            <FormItem top="Загрузите фото книги">
                                 <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
                                     (e) => {
                                         let image_as_files = e.target.files[0];
-
                                         // let image_as_base64 = URL.createObjectURL(e.target.files)
                                         setPhoto(image_as_files)
                                         //  setCounterFiles(image_as_files.length)
@@ -204,17 +172,36 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                                     загрузить файл
                                 </File>
                             </FormItem>
+                            <FormItem top="Описание книги ">
+                                <Textarea placeholder="описание"
+                                    defaultValue={description}
+                                    onChange={(e) => {
+                                        setDescription(e.target.value)
+                                        console.log(e.target.value);
+                                    }}
+                                />
+                            </FormItem>
+                            <FormItem top="ISBN книги" >
+                                <Input
+                                    type="text"
+                                    align="left"
+                                    defaultValue={ISBN}
+                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
 
-
-                            <FormItem top="Загрузить книгу">
+                            </FormItem>
+                            <FormItem>
+                                <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
+                                    setDamaged(e.target.checked)
+                                    console.log(e.target.checked)
+                                }}>в книге есть повреждения</Checkbox>
+                            </FormItem>
+                            
+                            <FormItem top="Обновить книгу">
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
                                     UpdateBook()
                                     // }
-
-
-
                                 }} >
                                     обновить
                                 </Button>
@@ -285,16 +272,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                 <Group>
                     <Div>
                         <FormLayoutGroup>
-
-                            <FormItem top="ISBN книги" >
-                                <Input
-                                    type="text"
-                                    align="left"
-                                    defaultValue={ISBN}
-                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
-
-                            </FormItem>
-                            <FormItem top="Название книги">
+                        <FormItem top="Название книги">
                                 <Input
                                     type="text"
                                     align="left"
@@ -308,29 +286,8 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     defaultValue={autor}
                                     placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
                             </FormItem>
-                            <FormItem top="Описание книги ">
-                                <Textarea placeholder="описание"
-                                    defaultValue={description}
-                                    onChange={(e) => {
-                                        setDescription(e.target.value)
-                                        console.log(e.target.value);
-                                    }}
-                                />
-                            </FormItem>
-
-
                             <ChipsSelectJaner currentJaners={janer} setJaners={setJaners} />
-                            <FormItem>
-                                <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
-                                    setDamaged(e.target.checked)
-                                    console.log(e.target.checked)
-                                }}>в книге есть повреждения</Checkbox>
-
-
-                            </FormItem>
-                            <FormItem top="Загрузите ваше фото">
-
-
+                            <FormItem top="Загрузите фото книги">
                                 <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
                                     (e) => {
                                         let image_as_files = e.target.files[0];
@@ -344,17 +301,35 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     загрузить файл
                                 </File>
                             </FormItem>
+                            <FormItem top="ISBN книги" >
+                                <Input
+                                    type="text"
+                                    align="left"
+                                    defaultValue={ISBN}
+                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
 
-
+                            </FormItem>
+                            <FormItem top="Описание книги ">
+                                <Textarea placeholder="описание"
+                                    defaultValue={description}
+                                    onChange={(e) => {
+                                        setDescription(e.target.value)
+                                        console.log(e.target.value);
+                                    }}
+                                />
+                            </FormItem>
+                            <FormItem>
+                                <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
+                                    setDamaged(e.target.checked)
+                                    console.log(e.target.checked)
+                                }}>в книге есть повреждения</Checkbox>
+                            </FormItem>
                             <FormItem top="Загрузить книгу">
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
                                     AddBook()
                                     // }
-
-
-
                                 }} >
                                     обновить
                                 </Button>
