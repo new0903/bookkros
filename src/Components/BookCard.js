@@ -37,7 +37,7 @@ const BookCard = ({ Book, key }) => {
                     />
                 </picture>
                 <div style={{ position: "absolute", display: "flex", alignItems: "flex-end", height: "210px" }}>
-                    <div style={{ width: "220px" }}>
+                    <div>
 
                     </div>
                 </div>

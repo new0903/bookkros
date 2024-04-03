@@ -6,8 +6,6 @@ import {
 import { useSearchParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import axios from 'axios';
 import { Icon24DeleteOutline, Icon24Camera, Icon24Document } from '@vkontakte/icons';
-
-
 import { $userServer } from '../store/user';
 import { $janers } from '../store/janer';
 import { getJaner } from '../api/requests';
@@ -219,7 +217,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
 
 export const AddBook = ({ id, nav, fetchedUser }) => {
 
-
+    const history = useRouteNavigator() 
 
     const [ISBN, setISBN] = React.useState(null);
     const [name, setName] = React.useState(null);
@@ -229,15 +227,12 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
     const [janer, setJaners] = React.useState([]);
     const [autor, setAutor] = React.useState(null);
 
-
-
-
     React.useEffect(() => {
         console.log(janer)
     }, [janer])
-
-
     async function AddBook() {
+
+       
 
         var formData = new FormData();
         formData.append('ISBN', ISBN)
@@ -254,11 +249,12 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
         const result=await createBookFx(formData)
         console.log(result);
 
+        /*--------------тут перекидывание на новый экран + анимацию небольшую думаю ддобавить---------------*/
+
+        setTimeout(() => {
+            history.push('/userBook'); // Перекидываем на новый экран
+          }, 400);
     }
-
-
-
-
     // React.useEffect(() => {
     //     sendPlace()
     // }, place)
@@ -329,6 +325,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
                                     AddBook()
+
                                     // }
                                 }} >
                                     обновить
@@ -337,7 +334,6 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                         </FormLayoutGroup>
                     </Div>
                 </Group >
-
             }
         </Panel>
     )
