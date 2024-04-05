@@ -53,7 +53,7 @@ const ChipsSelectJaner = ({ setJaners, currentJaners }) => {
     return (
         <FormItem
             htmlFor="colorsWithoutButton"
-            top="Выберите жанры"
+            top="Жанр"
         >
             <ChipsSelect
                 id="colorsWithoutButton"
@@ -87,7 +87,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
     const [isDamaged, setDamaged] = React.useState(null);
     const [janer, setJaners] = React.useState([]);
     const [autor, setAutor] = React.useState(null);
-
+    const [photoUrl, setPhotoUrl] = React.useState(null);
 
 
     React.useEffect(() => {
@@ -107,6 +107,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
         setDamaged(currentBook.isDamaged);
         setJaners(currentBook.janers);
         setAutor(currentBook.autor.name_autor);
+        
     }
     const UpdateBook = async () => {
         var formData = new FormData();
@@ -142,14 +143,14 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                 <Group>
                     <Div>
                         {fetchedUser.id == book.userInfo.id ? (<FormLayoutGroup>
-                            <FormItem top="Название книги">
+                            <FormItem top="Название">
                                 <Input
                                     type="text"
                                     align="left"
                                     defaultValue={name}
                                     placeholder="Название" onChange={(e) => setName(e.target.value)} />
                             </FormItem>
-                            <FormItem top="Автор книги">
+                            <FormItem top="Автор">
                                 <Input
                                     type="text"
                                     align="left"
@@ -157,20 +158,24 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                                     placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
                             </FormItem>
                             <ChipsSelectJaner currendJaners={janer} setJaners={setJaners} />
-                            <FormItem top="Загрузите фото книги">
+                            <FormItem top="Обложка">
                                 <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
                                     (e) => {
                                         let image_as_files = e.target.files[0];
                                         // let image_as_base64 = URL.createObjectURL(e.target.files)
                                         setPhoto(image_as_files)
+                                        setPhotoUrl(URL.createObjectURL(image_as_files));
                                         //  setCounterFiles(image_as_files.length)
                                         console.log(photo)
                                     }
                                 } >
-                                    загрузить файл
+                                    Добавить фото
                                 </File>
                             </FormItem>
-                            <FormItem top="Описание книги ">
+                            <FormItem>
+                                <div>{photoUrl ? <img src={photoUrl} style={{ maxWidth: '100%', maxHeight: '100%' }} /> : null}</div>
+                            </FormItem>
+                            <FormItem top="Описание">
                                 <Textarea placeholder="описание"
                                     defaultValue={description}
                                     onChange={(e) => {
@@ -194,14 +199,14 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                                 }}>в книге есть повреждения</Checkbox>
                             </FormItem>
                             
-                            <FormItem top="Обновить книгу">
+                            <FormItem top="Обновить">
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
                                     UpdateBook()
                                     // }
                                 }} >
-                                    обновить
+                                    Сохранить
                                 </Button>
                             </FormItem>
                         </FormLayoutGroup>
@@ -223,6 +228,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
     const [name, setName] = React.useState(null);
     const [description, setDescription] = React.useState(null);
     const [photo, setPhoto] = React.useState(null);
+    const [photoUrl, setPhotoUrl] = React.useState(null);
     const [isDamaged, setDamaged] = React.useState(null);
     const [janer, setJaners] = React.useState([]);
     const [autor, setAutor] = React.useState(null);
@@ -262,20 +268,20 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
     return (
         <Panel id={id}>
             <PanelHeader>
-                Обновить информацию о книге
+            Добавление книги
             </PanelHeader>
             {fetchedUser &&
                 <Group>
                     <Div>
                         <FormLayoutGroup>
-                        <FormItem top="Название книги">
+                        <FormItem top="Название">
                                 <Input
                                     type="text"
                                     align="left"
                                     defaultValue={name}
                                     placeholder="Название" onChange={(e) => setName(e.target.value)} />
                             </FormItem>
-                            <FormItem top="Автор книги">
+                            <FormItem top="Автор">
                                 <Input
                                     type="text"
                                     align="left"
@@ -283,7 +289,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
                             </FormItem>
                             <ChipsSelectJaner currentJaners={janer} setJaners={setJaners} />
-                            <FormItem top="Загрузите фото книги">
+                            <FormItem top="Обложка">
                                 <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
                                     (e) => {
                                         let image_as_files = e.target.files[0];
@@ -291,13 +297,17 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                         // let image_as_base64 = URL.createObjectURL(e.target.files)
                                         setPhoto(image_as_files)
                                         //  setCounterFiles(image_as_files.length)
+                                        setPhotoUrl(URL.createObjectURL(image_as_files));
                                         console.log(photo)
                                     }
                                 } >
-                                    загрузить файл
+                                    Добавить фото
                                 </File>
                             </FormItem>
-                            <FormItem top="ISBN книги" >
+                            <FormItem>
+                                <div>{photoUrl ? <img src={photoUrl} style={{ maxWidth: '100%', maxHeight: '100%' }} /> : null}</div>
+                            </FormItem>
+                            <FormItem top="ISBN" >
                                 <Input
                                     type="text"
                                     align="left"
@@ -305,7 +315,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
 
                             </FormItem>
-                            <FormItem top="Описание книги ">
+                            <FormItem top="Описание">
                                 <Textarea placeholder="описание"
                                     defaultValue={description}
                                     onChange={(e) => {
@@ -320,7 +330,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     console.log(e.target.checked)
                                 }}>в книге есть повреждения</Checkbox>
                             </FormItem>
-                            <FormItem top="Загрузить книгу">
+                            <FormItem>
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
@@ -328,7 +338,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
 
                                     // }
                                 }} >
-                                    обновить
+                                    Сохранить
                                 </Button>
                             </FormItem>
                         </FormLayoutGroup>
