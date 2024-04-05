@@ -14,18 +14,18 @@ import { $userServer } from '../store/user';
 import { $towns } from '../store/towns';
 
 // просто пример, города нужно будет взять, пока не знаю где
-const cities = [
-    { id: 1, name: 'Любой' },
-    { id: 2, name: 'Санкт-Петербург' },
-    { id: 3, name: 'Москва' },
-    { id: 4, name: 'Волгоград' },
-    { id: 5, name: 'Владивосток' },
-    { id: 6, name: 'Воронеж' },
-    { id: 7, name: 'Екатеринбург' },
-    { id: 8, name: 'Казань' },
-    { id: 9, name: 'Калининград' },
-    { id: 10, name: 'Краснодар' }
-];
+// const cities = [
+//     { id: 1, name: 'Любой' },
+//     { id: 2, name: 'Санкт-Петербург' },
+//     { id: 3, name: 'Москва' },
+//     { id: 4, name: 'Волгоград' },
+//     { id: 5, name: 'Владивосток' },
+//     { id: 6, name: 'Воронеж' },
+//     { id: 7, name: 'Екатеринбург' },
+//     { id: 8, name: 'Казань' },
+//     { id: 9, name: 'Калининград' },
+//     { id: 10, name: 'Краснодар' }
+// ];
 
 export function Location({ id, fetchedUser }) {
     //const [towns, userServer] = useUnit([$towns, $userServer]);

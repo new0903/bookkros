@@ -22,7 +22,7 @@ import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline
 import axios from 'axios';
 import { $books ,$bookId,setBookId,filterBooks } from '../store/book';
 import { $userServer } from '../store/user';
-import { getOneBook } from '../api/book';
+import { getOneBook,deleteBookFx } from '../api/book';
 import { useUnit } from 'effector-react';
 import './BookInfo.css'
 
@@ -31,14 +31,13 @@ import './BookInfo.css'
 export const BookInfo = ({ id, nav, fetchedUser }) => {
     // const [books, userServer] = useUnit([$books, $userServer]);
     // const [params] = useSearchParams()
-    // const routeNavigator = useRouteNavigator()
+     const routeNavigator = useRouteNavigator()
     // const idBook = Number(params.get('id') || 1);
 
     // const [book, setBook] = React.useState(null)
     // console.log(idBook)
 
     const [params] = useSearchParams()
-    const [isEditing, setIsEditing] =  React.useState(false);
     const [book, setBook] =  React.useState(null);
     const userServer = useUnit($userServer);
     //const bookId = useUnit($bookId);
@@ -46,14 +45,16 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
     setBookId(idBook)
 
 
-    React. useEffect(() => {
+    React.useEffect(() => {
       const getCurrentTask = async () => {
-        const currentBook = await getOneBook(123, idBook);//userServer.id
+        const currentBook = await getOneBook(fetchedUser.id, idBook);//userServer.id
+        console.log(currentBook)
         setBook(currentBook);
       }
       getCurrentTask();
     }, [idBook]);
-  
+
+
     
 
 
@@ -70,6 +71,12 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
             }
             
             //console.log(PlaceCard.imgsFile)
+        } 
+        console.log(fetchedUser)
+        console.log(selectBook)
+        if (fetchedUser.id==selectBook.userInfo.id_vkontakte) {
+            //
+            console.log(" Editing");
         }
         return (
 
@@ -119,7 +126,7 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                     {selectBook.ISBN}
                                 </div>
                                 <div className="BookInfo_content_description">
-                                     {isEditing &&
+                                     {fetchedUser.id==selectBook.userInfo.id_vkontakte &&
                                         <div style={{ display: "flex", margin: "5px" }}>
 
                                             <Icon24HammerOutline fill='#447bba' onClick={() => {
@@ -128,13 +135,12 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                             редактировать книгу
                                         </div>
                                     } 
-                                    {isEditing &&
+                                    {fetchedUser.id==selectBook.userInfo.id_vkontakte &&
                                         <div style={{ display: "flex", margin: "5px" }}>
-                                        <Icon24DeleteOutline fill='#447bba' onClick={() => {
-                                            // axios.get(`https://russcazak10.ru/web/index.php?r=api/deleteplaces&id_place=${idBook}`).then((res) => {
-                                            //     console.log(res.data)
-                                            // })
-                                            // routeNavigator.push(`/`)
+                                        <Icon24DeleteOutline fill='#447bba' onClick={async () => {
+                                            await deleteBookFx(idBook)
+                                            routeNavigator.push('/');
+
                                         }} />
                                         удалить книгу из приложения
                                         </div>
@@ -158,7 +164,7 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                     </Group>
                     <Group>
                         <div className='content'>
-                             { selectBook.description ? selectBook.description : ''} 
+                             { selectBook.description && selectBook.description } 
                         </div>
                     </Group>
                 </div>

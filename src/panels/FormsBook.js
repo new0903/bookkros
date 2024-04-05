@@ -8,14 +8,19 @@ import axios from 'axios';
 import { Icon24DeleteOutline, Icon24Camera, Icon24Document } from '@vkontakte/icons';
 
 
+import { $books, $bookId, setBookId, filterBooks } from '../store/book';
 import { $userServer } from '../store/user';
 import { $janers } from '../store/janer';
 import { getJaner } from '../api/requests';
 import { getOneBook, createBookFx, putOneBook } from '../api/book';
 
+
+
 const ChipsSelectJaner = ({ setJaners, currentJaners }) => {
     const janersServer = useUnit($janers);
-    const [selectedJaners, setSelectedJaner] = React.useState([]);
+    const [selectedJaners, setSelectedJaner] = React.useState(
+        () => currentJaners.map(janer => ({ value: janer.id, label: janer.name }))
+    );
     const [janersLocal, setJanersLocal] = React.useState(
 
         () => janersServer.map(janer => ({ value: janer.id, label: janer.name }))
@@ -29,10 +34,11 @@ const ChipsSelectJaner = ({ setJaners, currentJaners }) => {
             setJanersLocal(() => janers.map(janer => ({ value: janer.id, label: janer.name })))
             console.log(janers)
             console.log(janersServer)
+            console.log(currentJaners)
 
-            if (currentJaners.length>0) {
-                setSelectedJaner(() => currentJaners.map(janer => ({ value: janer.id, label: janer.name })))
-            }
+          //  if (currentJaners.length > 0) {
+              //  setSelectedJaner()
+           // }
         }
 
         if (janersServer.length < 1) {
@@ -81,6 +87,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
     const idBook = Number(params.get('id') || 1);
 
 
+    setBookId(idBook)
 
     const [ISBN, setISBN] = React.useState(null);
     const [name, setName] = React.useState(null);
@@ -91,6 +98,16 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
     const [autor, setAutor] = React.useState(null);
 
 
+    const GetBook = async () => {
+        const currentBook = await getOneBook(fetchedUser.id, idBook);//userServer.id
+        setBook(currentBook);
+        setISBN(currentBook.ISBN);
+        setName(currentBook.name);
+        setDescription(currentBook.description);
+        setDamaged(currentBook.isDamaged);
+        setJaners(currentBook.janer);
+        setAutor(currentBook.autor.name_autor);
+    }
 
     React.useEffect(() => {
         GetBook()
@@ -100,16 +117,6 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
     }, [janer])
 
 
-    const GetBook = async () => {
-        const currentBook = await getOneBook(fetchedUser.id, idBook);//userServer.id
-        setBook(currentBook);
-        setISBN(currentBook.ISBN);
-        setName(currentBook.name);
-        setDescription(currentBook.description);
-        setDamaged(currentBook.isDamaged);
-        setJaners(currentBook.janers);
-        setAutor(currentBook.autor.name_autor);
-    }
     const UpdateBook = async () => {
         var formData = new FormData();
         formData.append('id', idBook)//если обновлять книгу то отправляем это
@@ -124,7 +131,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
         formData.append('file', photo) // сюда загружаем 1 файл, не обязательно
         formData.append('user_id', fetchedUser.id)//id пользователя ОБЯЗАТЕЛЬНО
         formData.append('autor_id', autor)//id автора, или просто передать ФИО автора, если на сервер не найдется то добавится новый автор. 
-        const result=  await putOneBook(formData)
+        const result = await putOneBook(formData)
         console.log(result);
     }
 
@@ -134,100 +141,102 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
     // React.useEffect(() => {
     //     sendPlace()
     // }, place)
-
-    return (
-        <Panel id={id}>
-            <PanelHeader>
-                Обновить информацию о книге
-            </PanelHeader>
-            {fetchedUser &&
-                <Group>
-                    <Div>
-
-                        {fetchedUser.id == book.userInfo.id ? (<FormLayoutGroup>
-
-                            <FormItem top="ISBN книги" >
-                                <Input
-                                    type="text"
-                                    align="left"
-                                    defaultValue={ISBN}
-                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
-
-                            </FormItem>
-                            <FormItem top="Название книги">
-                                <Input
-                                    type="text"
-                                    align="left"
-                                    defaultValue={name}
-                                    placeholder="Название" onChange={(e) => setName(e.target.value)} />
-                            </FormItem>
-                            <FormItem top="Автор книги">
-                                <Input
-                                    type="text"
-                                    align="left"
-                                    defaultValue={autor}
-                                    placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
-                            </FormItem>
-                            <FormItem top="Описание книги ">
-                                <Textarea placeholder="описание"
-                                    defaultValue={description}
-                                    onChange={(e) => {
-                                        setDescription(e.target.value)
-                                        console.log(e.target.value);
-                                    }}
-                                />
-                            </FormItem>
+    if (book) {
 
 
-                            <ChipsSelectJaner currendJaners={janer} setJaners={setJaners} />
-                            <FormItem>
-                                <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
-                                    setDamaged(e.target.checked)
-                                    console.log(e.target.checked)
-                                }}>в книге есть повреждения</Checkbox>
+        return (
+            <Panel id={id}>
+                <PanelHeader>
+                    Обновить информацию о книге
+                </PanelHeader>
+                {fetchedUser &&
+                    <Group>
+                        <Div>
+
+                            {fetchedUser.id == book.userInfo.id_vkontakte ? (<FormLayoutGroup>
+
+                                <FormItem top="ISBN книги" >
+                                    <Input
+                                        type="text"
+                                        align="left"
+                                        defaultValue={ISBN}
+                                        placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
+
+                                </FormItem>
+                                <FormItem top="Название книги">
+                                    <Input
+                                        type="text"
+                                        align="left"
+                                        defaultValue={name}
+                                        placeholder="Название" onChange={(e) => setName(e.target.value)} />
+                                </FormItem>
+                                <FormItem top="Автор книги">
+                                    <Input
+                                        type="text"
+                                        align="left"
+                                        defaultValue={autor}
+                                        placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
+                                </FormItem>
+                                <FormItem top="Описание книги ">
+                                    <Textarea placeholder="описание"
+                                        defaultValue={description}
+                                        onChange={(e) => {
+                                            setDescription(e.target.value)
+                                            console.log(e.target.value);
+                                        }}
+                                    />
+                                </FormItem>
 
 
-                            </FormItem>
-                            <FormItem top="Загрузите ваше фото">
+                                <ChipsSelectJaner currentJaners={janer} setJaners={setJaners} />
+                                <FormItem>
+                                    <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
+                                        setDamaged(e.target.checked)
+                                        console.log(e.target.checked)
+                                    }}>в книге есть повреждения</Checkbox>
 
 
-                                <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
-                                    (e) => {
-                                        let image_as_files = e.target.files[0];
-
-                                        // let image_as_base64 = URL.createObjectURL(e.target.files)
-                                        setPhoto(image_as_files)
-                                        //  setCounterFiles(image_as_files.length)
-                                        console.log(photo)
-                                    }
-                                } >
-                                    загрузить файл
-                                </File>
-                            </FormItem>
+                                </FormItem>
+                                <FormItem top="Загрузите ваше фото">
 
 
-                            <FormItem top="Загрузить книгу">
-                                <Button size="s" align='center' mode="secondary" onClick={() => {
-                                    // if (!dataSend) {
-                                    //  setDataSend(!dataSend)
-                                    UpdateBook()
-                                    // }
+                                    <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
+                                        (e) => {
+                                            let image_as_files = e.target.files[0];
+
+                                            // let image_as_base64 = URL.createObjectURL(e.target.files)
+                                            setPhoto(image_as_files)
+                                            //  setCounterFiles(image_as_files.length)
+                                            console.log(photo)
+                                        }
+                                    } >
+                                        загрузить файл
+                                    </File>
+                                </FormItem>
+
+
+                                <FormItem top="Загрузить книгу">
+                                    <Button size="s" align='center' mode="secondary" onClick={() => {
+                                        // if (!dataSend) {
+                                        //  setDataSend(!dataSend)
+                                        UpdateBook()
+                                        // }
 
 
 
-                                }} >
-                                    обновить
-                                </Button>
-                            </FormItem>
-                        </FormLayoutGroup>
-                        ) : <Div>У вас нет доступа к форме редактирования</Div>}
-                    </Div>
-                </Group >
+                                    }} >
+                                        обновить
+                                    </Button>
+                                </FormItem>
+                            </FormLayoutGroup>
+                            ) : <Div>У вас нет доступа к форме редактирования</Div>}
+                        </Div>
+                    </Group >
 
-            }
-        </Panel>
-    )
-
+                }
+            </Panel>
+        )
+    }
 }
 
 export const AddBook = ({ id, nav, fetchedUser }) => {
@@ -264,7 +273,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
         formData.append('file', photo) // сюда загружаем 1 файл, не обязательно
         formData.append('user_id', fetchedUser.id)//id пользователя ОБЯЗАТЕЛЬНО
         formData.append('autor_id', autor)//id автора, или просто передать ФИО автора, если на сервер не найдется то добавится новый автор. 
-        const result=await createBookFx(formData)
+        const result = await createBookFx(formData)
         console.log(result);
 
     }

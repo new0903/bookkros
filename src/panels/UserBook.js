@@ -15,8 +15,6 @@ import BookCard from '../Components/BookCard'
 export const UserBook = ({ id, fetchedUser }) => {
   const [books, userServer, janers] = useUnit([$books, $userServer, $janers]);
   
-  const [text1, setText1] = useState('');
-  const [test, setTest] = useState('');
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
   const routeNavigator = useRouteNavigator();
   const platform = usePlatform();
@@ -25,32 +23,32 @@ export const UserBook = ({ id, fetchedUser }) => {
     //const test2= await axios.get('https://russcazak10.ru/web/index.php?r=api/getbook').then(res=>res.data);
     // console.log(test2)
     // setTest(test2)
-    await getBookFx();
+    await getBookFx(fetchedUser.id);
   }
   const getJaners = async () => {
     // const test2=  await getBookFx(123);
     //const test2= await axios.get('https://russcazak10.ru/web/index.php?r=api/getbook').then(res=>res.data);
     // console.log(test2)
     // setTest(test2)
-    await getJaner();
+    await getJaner(fetchedUser.id);
   }
   React.useEffect(() => {
 
     getBooks()
     getJaners()
   }, []);
-  const FilterIconForWriteBar = (
-    <AdaptiveIconRenderer
-      IconCompact={platform === 'ios' ? Icon24Filter : Icon24Filter}
-      IconRegular={Icon24Filter}
-    />
-  );
-  const VoiceOutlineIcon = (
-    <AdaptiveIconRenderer
-      IconCompact={platform === 'ios' ? Icon28VoiceOutline : Icon24VoiceOutline}
-      IconRegular={Icon28VoiceOutline}
-    />
-  );
+  // const FilterIconForWriteBar = (
+  //   <AdaptiveIconRenderer
+  //     IconCompact={platform === 'ios' ? Icon24Filter : Icon24Filter}
+  //     IconRegular={Icon24Filter}
+  //   />
+  // );
+  // const VoiceOutlineIcon = (
+  //   <AdaptiveIconRenderer
+  //     IconCompact={platform === 'ios' ? Icon28VoiceOutline : Icon24VoiceOutline}
+  //     IconRegular={Icon28VoiceOutline}
+  //   />
+  // );
   console.log(books)
   return (
     <Panel id={id}>
