@@ -36,12 +36,12 @@ export const App = () => {
     }
     fetchData();
   }, []);
-  //popout={popout}
+  //
   return (
-    <SplitLayout >
+    <SplitLayout popout={popout} >
       <SplitCol >
-        <Epic activePanel={activePanel} tabbar={<TabBar activePanel={activePanel} />}>
-          <View activePanel={activePanel}>
+        <Epic activePanel={activePanel} tabbar={<TabBar activePanel={activePanel} />} >
+          <View activePanel={activePanel} >
             <Home id="home" fetchedUser={fetchedUser} />
             <BookInfo id="bookInfo"  fetchedUser={fetchedUser} />
             <Persik id="persik"  fetchedUser={fetchedUser} />

@@ -6,7 +6,7 @@ import { useUnit } from 'effector-react';
 import { $books } from '../store/book';
 import { $janers } from '../store/janer';
 import { $userServer } from '../store/user';
-import { getBookFx } from '../api/book';
+import { getBookFx,getUserBookFx } from '../api/book';
 import { getJaner } from '../api/requests';
 import axios from 'axios';
 import './Home.css'
@@ -23,7 +23,7 @@ export const UserBook = ({ id, fetchedUser }) => {
     //const test2= await axios.get('https://russcazak10.ru/web/index.php?r=api/getbook').then(res=>res.data);
     // console.log(test2)
     // setTest(test2)
-    await getBookFx(fetchedUser.id);
+    await getUserBookFx(fetchedUser.id);
   }
   const getJaners = async () => {
     // const test2=  await getBookFx(123);

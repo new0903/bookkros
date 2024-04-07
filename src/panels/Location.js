@@ -40,7 +40,9 @@ export function Location({ id, fetchedUser }) {
     React.useEffect(() => {
         const getTown = async () => {
             const t = await getTowns();
-            setSelectedCity(t)
+            
+            setSelectedCity(() => t.map(town => ({ value: town.id, label: town.label })))
+          //  setSelectedCity(t)
             console.log(t)
            // console.log(towns)
 
