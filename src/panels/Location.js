@@ -13,20 +13,6 @@ import { useUnit } from 'effector-react';
 import { $userServer } from '../store/user';
 import { $towns } from '../store/towns';
 
-// просто пример, города нужно будет взять, пока не знаю где
-// const cities = [
-//     { id: 1, name: 'Любой' },
-//     { id: 2, name: 'Санкт-Петербург' },
-//     { id: 3, name: 'Москва' },
-//     { id: 4, name: 'Волгоград' },
-//     { id: 5, name: 'Владивосток' },
-//     { id: 6, name: 'Воронеж' },
-//     { id: 7, name: 'Екатеринбург' },
-//     { id: 8, name: 'Казань' },
-//     { id: 9, name: 'Калининград' },
-//     { id: 10, name: 'Краснодар' }
-// ];
-
 export function Location({ id, fetchedUser }) {
     //const [towns, userServer] = useUnit([$towns, $userServer]);
 
@@ -97,21 +83,8 @@ export function Location({ id, fetchedUser }) {
     return (
         <>
             <Panel id={id}>
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    //backgroundImage: `url('background.jpg')`, хз как взять из макета 
-                    backgroundSize: 'cover',
-                    zIndex: -1
-                }} />
-
                 <Div>
-                    <Group style={{ marginBottom: "50px" }}>
-
-
+                    <Group style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
                         {selectedCity.length > 0 &&
                             <CustomSelect
                                 value={value}
@@ -130,7 +103,7 @@ export function Location({ id, fetchedUser }) {
                                 )}
                                 onChange={onCustomSearchChange}
                             />}
-                        <Button
+                        <Button style={{marginTop:'10px'}}
                             size="l"
                             mode="primary"
 
@@ -139,7 +112,7 @@ export function Location({ id, fetchedUser }) {
                                 setUserTown(value)
                             }}
                         >
-                            Перейти в приложение
+                            Сохранить и продолжить 
                         </Button>
 
 

@@ -15,7 +15,6 @@ import { getJaner } from '../api/requests';
 import { getOneBook, createBookFx, putOneBook } from '../api/book';
 
 
-
 const ChipsSelectJaner = ({ setJaners, currentJaners }) => {
     const janersServer = useUnit($janers);
     const [selectedJaners, setSelectedJaner] = React.useState(
@@ -36,9 +35,9 @@ const ChipsSelectJaner = ({ setJaners, currentJaners }) => {
             console.log(janersServer)
             console.log(currentJaners)
 
-          //  if (currentJaners.length > 0) {
-              //  setSelectedJaner()
-           // }
+            //  if (currentJaners.length > 0) {
+            //  setSelectedJaner()
+            // }
         }
 
         if (janersServer.length < 1) {
@@ -250,9 +249,75 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
     const [isDamaged, setDamaged] = React.useState(null);
     const [janer, setJaners] = React.useState([]);
     const [autor, setAutor] = React.useState(null);
+    const [formErrors, setFormErrors] = useState({
+        ISBN: false,
+        name: false,
+        autor: false,
+        description: false,
+        photo: false,
+        janer: false
+    });
+    
+    function check_ean13( str )
+        {
+            var kof = [ 1,  3,  1,  3, 1, 3, 1, 3, 1, 3, 1, 3, 1 ];
+            var sum = 0;
+            for ( i = 0; i < 13; i++ ) {
+                sum = sum + (str.charCodeAt(i)-48) * kof[i];
+            }
+            return ( sum % 10 );
+        }
+    function is978(str) {
+        if (str[0] != '9') return false;
+        if (str[1] != '7') return false;
+        if (str[2] != '8') return false;
+        return true;
+    }
+    function check_ean12(str) {
+        var kof = [1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1];
+        var sum = 0;
+        for (i = 0; i < 12; i++) {
+            sum = sum + (str.charCodeAt(i) - 48) * kof[i];
+        }
+        ost = sum % 10;
+        if (ost > 0) ost = 10 - ost;
+        return (ost);
+    }
+    const find = () => {
+        const len = ISBN.length;
+        if (len !== 12 && len !== 13) {
+            return false;
+        }
+        if (!is978(ISBN)) {
+            return false;
+        }
+        if (len === 12) {
+            const res = check_ean12(ISBN);
+            // сдесь если ISBN вверный 
+            return true;
+        } else if (len === 13) {
+            const res = check_ean13(ISBN);
+            if (res === 0) {
+                // сдесь если ISBN вверный 
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
 
-
-
+    const validateForm = () => {
+        const errors = {
+            ISBN: !ISBN || find,
+            name: !name || name.length > 90,
+            autor: !autor,
+            description: !description || description.length > 400,
+            photo: !photo,
+            janer: janer.length === 0 || janer.length > 3
+        };
+        setFormErrors(errors);
+        return !Object.values(errors).some((error) => error);
+    };
 
     React.useEffect(() => {
         console.log(janer)
@@ -260,27 +325,23 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
 
 
     async function AddBook() {
-
-        var formData = new FormData();
-        formData.append('ISBN', ISBN)
-        formData.append('name', name)
-        formData.append('description', description) //необязательно отправлять может быть пустым
-        formData.append('isDamaged', isDamaged ? 1 : 0) // 0 или 1
-        var ins = janer.length;
-        for (var x = 0; x < ins; x++) {
-            formData.append("janers[]", janer[x].value); //загружаем в форму id жанров должен быть хотя бы 1 жанр
+        if (validateForm()) {
+            var formData = new FormData();
+            formData.append('ISBN', ISBN)
+            formData.append('name', name)
+            formData.append('description', description) //необязательно отправлять может быть пустым
+            formData.append('isDamaged', isDamaged ? 1 : 0) // 0 или 1
+            var ins = janer.length;
+            for (var x = 0; x < ins; x++) {
+                formData.append("janers[]", janer[x].value); //загружаем в форму id жанров должен быть хотя бы 1 жанр
+            }
+            formData.append('file', photo) // сюда загружаем 1 файл, не обязательно
+            formData.append('user_id', fetchedUser.id)//id пользователя ОБЯЗАТЕЛЬНО
+            formData.append('autor_id', autor)//id автора, или просто передать ФИО автора, если на сервер не найдется то добавится новый автор. 
+            const result = await createBookFx(formData)
+            console.log(result);
         }
-        formData.append('file', photo) // сюда загружаем 1 файл, не обязательно
-        formData.append('user_id', fetchedUser.id)//id пользователя ОБЯЗАТЕЛЬНО
-        formData.append('autor_id', autor)//id автора, или просто передать ФИО автора, если на сервер не найдется то добавится новый автор. 
-        const result = await createBookFx(formData)
-        console.log(result);
-
     }
-
-
-
-
     // React.useEffect(() => {
     //     sendPlace()
     // }, place)
@@ -295,51 +356,50 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                     <Div>
                         <FormLayoutGroup>
 
-                            <FormItem top="ISBN книги" >
+                            <FormItem top="ISBN книги" bottom={formErrors.ISBN && 'Введите корректный ISBN'}>
                                 <Input
                                     type="text"
-                                    align="left"
-                                    defaultValue={ISBN}
-                                    placeholder="Название" onChange={(e) => setISBN(e.target.value)} />
-
+                                    value={ISBN}
+                                    placeholder="ISBN"
+                                    onChange={(e) => setISBN(e.target.value)}
+                                />
                             </FormItem>
-                            <FormItem top="Название книги">
+                            <FormItem top="Название книги" bottom={formErrors.name && 'Введите название книги'}>
                                 <Input
                                     type="text"
-                                    align="left"
-                                    defaultValue={name}
-                                    placeholder="Название" onChange={(e) => setName(e.target.value)} />
+                                    value={name}
+                                    placeholder="Название"
+                                    onChange={(e) => setName(e.target.value)}
+                                />
                             </FormItem>
-                            <FormItem top="Автор книги">
+                            <FormItem top="Автор книги" bottom={formErrors.autor && 'Введите автора. Если не знаете ФИО автора, напишите «Автор неизвестен»'}>
                                 <Input
                                     type="text"
-                                    align="left"
-                                    defaultValue={autor}
-                                    placeholder="Автор" onChange={(e) => setAutor(e.target.value)} />
+                                    value={autor}
+                                    placeholder="Автор"
+                                    onChange={(e) => setAutor(e.target.value)}
+                                />
                             </FormItem>
-                            <FormItem top="Описание книги ">
-                                <Textarea placeholder="описание"
-                                    defaultValue={description}
-                                    onChange={(e) => {
-                                        setDescription(e.target.value)
-                                        console.log(e.target.value);
-                                    }}
+                            <FormItem top="Описание книги" bottom={formErrors.description && 'Ошибка описания'}>
+                                <Textarea
+                                    value={description}
+                                    placeholder="Описание"
+                                    onChange={(e) => setDescription(e.target.value)}
                                 />
                             </FormItem>
 
 
-                            <ChipsSelectJaner currentJaners={janer} setJaners={setJaners} />
-                            <FormItem>
+                            <ChipsSelectJaner currentJaners={janer} setJaners={setJaners} bottom={
+                                formErrors.janer && formErrors.janer.length > 3 &&
+                                'Выберите не более трех жанров'
+                            } />
+                            <FormItem >
                                 <Checkbox defaultChecked={isDamaged ? true : false} onChange={(e) => {
                                     setDamaged(e.target.checked)
                                     console.log(e.target.checked)
                                 }}>в книге есть повреждения</Checkbox>
-
-
                             </FormItem>
-                            <FormItem top="Загрузите ваше фото">
-
-
+                            <FormItem top="Загрузите ваше фото" bottom={formErrors.photo && 'Загрузите фото'}>
                                 <File before={<Icon24Camera role="presentation" />} multiple size="m" a onChange={
                                     (e) => {
                                         let image_as_files = e.target.files[0];
@@ -361,11 +421,8 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     //  setDataSend(!dataSend)
                                     AddBook()
                                     // }
-
-
-
                                 }} >
-                                    обновить
+                                    Добавить книгу
                                 </Button>
                             </FormItem>
                         </FormLayoutGroup>

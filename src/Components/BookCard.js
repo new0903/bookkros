@@ -1,9 +1,10 @@
 import React from 'react'
 import persik from '../assets/persik.png';
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, AdaptiveIconRenderer } from '@vkontakte/vkui';
 import { setBookId } from '../store/book';
 import { useUnit } from 'effector-react';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router'
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { Icon24WarningTriangleOutline, Icon28WarningTriangleOutline } from '@vkontakte/icons';
 //import { Icon16Like ,Icon16LikeOutline} from '@vkontakte/icons';
 const BookCard = ({ Book, key }) => {
     const MAX_PRODUCT_CARD_SIZE = 220
@@ -13,18 +14,26 @@ const BookCard = ({ Book, key }) => {
     //   console.log(key)
     let url = persik
     if (Object.keys(Book.photo)) {
-        if(Book.photo.length>0){
+        if (Book.photo.length > 0) {
             url = Book.photo
         }
-        
-        //console.log(PlaceCard.imgsFile)
     }
 
     return (
-        <div  className="BookCard" onClick={() => {
+        <div className="BookCard" onClick={() => {
             //setBookId(Book.id);
             routeNavigator.push(`/BookInfo?id=${id}`)//
         }}>
+            {Book.isDamaged === 1 ? (
+                <div style={{position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 999,
+                    margin:'10px'}}>
+                <AdaptiveIconRenderer IconCompact={Icon24WarningTriangleOutline} IconRegular={Icon28WarningTriangleOutline} />
+            </div>
+            ) : (<></>)
+            }
             <div className="BookCard_preview">
                 <picture className="BookCard_preview_picture">
                     <source srcSet={url} type="image/webp"></source>
