@@ -17,8 +17,8 @@ import BookCard from '../Components/BookCard'
 export const Home = ({ id, fetchedUser }) => {
   const [books, userServer, janers] = useUnit([$books, $userServer, $janers]);
   
-  const [text1, setText1] = useState('');
-  const [test, setTest] = useState('');
+  const [text, setText] = useState('');
+  const [janerId, setJanerId] = useState(0);
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
   const routeNavigator = useRouteNavigator();
   const platform = usePlatform();
@@ -42,6 +42,7 @@ export const Home = ({ id, fetchedUser }) => {
     getBooks()
     getJaners()
   }, []);
+
   const FilterIconForWriteBar = (
     <AdaptiveIconRenderer
       IconCompact={platform === 'ios' ? Icon24Filter : Icon24Filter}
@@ -55,13 +56,29 @@ export const Home = ({ id, fetchedUser }) => {
     />
   );
   console.log(books)
+
+
+  let thematicsFilteredBook = books.filter(
+    ({ name, ISBN, autor }) =>
+      name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
+      autor.name_autor.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
+      ISBN.toLowerCase().indexOf(text.toLowerCase()) > -1
+  );
+  if (janerId != 0) {
+    console.log(janerId)
+    thematicsFilteredBook = thematicsFilteredBook.filter(({ janer }) => janer.find((elem)=>janerId==elem.id) )
+  }
+
+  console.log(thematicsFilteredBook)
+
+
   return (
     <Panel id={id}>
       <PanelHeader>Найти книгу</PanelHeader>
       <Group>
         <WriteBar
-          value={text1}
-          onChange={(e) => setText1(e.target.value)}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
           before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>}
           after={
             <>
@@ -81,7 +98,12 @@ export const Home = ({ id, fetchedUser }) => {
           {janers.length > 0 &&
             janers.map((janer) => (
               <SubnavigationButton
-                onClick={true}>
+                selected={janerId === janer.id}
+                onClick={()=>{
+                  setJanerId(janer.id)
+                }}
+                key={janer.id}
+                >
                 {janer.name}
               </SubnavigationButton>
             )
@@ -90,15 +112,19 @@ export const Home = ({ id, fetchedUser }) => {
 
         </SubnavigationBar>
       </Group>
-      <Button size="s" appearance="accent">Случайная книга</Button>
+      <Button size="s" appearance="accent" onClick={()=>{
+        
+        const id = books[Math.floor(Math.random() * books.length)].id
+        routeNavigator.push(`/BookInfo?id=${id}`)
+      }}>Случайная книга</Button>
       <Group>
         <Header mode="primary">Другие книги
           в вашем городе</Header>
 
         <Div className='Books'>
-          {books.length > 0 ? (
+          {thematicsFilteredBook.length > 0 ? (
             <div className='Books_grid'>
-              {books.map((book) => (
+              {thematicsFilteredBook.map((book) => (
                 <BookCard Book={book} />
               ))}
             </div>

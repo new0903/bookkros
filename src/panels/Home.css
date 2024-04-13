@@ -1,5 +1,5 @@
 .Books {
- /* width: 100%;*/
+  /* width: 100%; */
   height: 100%;
 }
 
@@ -19,14 +19,13 @@
   opacity: 0;
 }
 
+
 .Books_grid {
   display: grid;
   backface-visibility: hidden;
   will-change: transform;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(var(--min-product-card-width), max-content)
-  );
+  grid-template-columns: repeat(auto-fit,
+    minmax(var(--min-product-card-width), max-content));
   margin: 0 12px 12px 12px;
   gap: 12px;
 }
@@ -106,29 +105,49 @@
   width: var(--max-product-card-width);
   height: var(--max-product-card-width);
 }
+
 @media (max-width: 660px) {
   .Books_grid {
     display: grid;
     backface-visibility: hidden;
     will-change: transform;
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(var(--min-product-card-width), max-content)
-    );
+    grid-template-columns: repeat(auto-fit,
+        minmax(var(--min-product-card-width), max-content));
     margin: 0 12px 12px 12px;
     gap: 12px;
   }
+  .BookPhoto_photo {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: center;
+    backface-visibility: hidden;
+    will-change: transform;
+    grid-template-columns: repeat(auto-fit,
+        minmax(var(--min-product-card-width), max-content));
+    gap: 12px;
+  }
 }
+
 @media (max-width: 450px) {
   .Books_grid {
     display: grid;
-  backface-visibility: hidden;
-  will-change: transform;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(var(--min-product-card-width), max-content)
-  );
-  margin: 0 12px 12px 12px;
-  gap: 12px;
+    justify-content: center;
+    backface-visibility: hidden;
+    will-change: transform;
+    grid-template-columns: repeat(auto-fit,
+        minmax(var(--min-product-card-width), max-content));
+    margin: 0 12px 12px 12px;
+    gap: 12px;
+  }
+  .BookPhoto_photo {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    backface-visibility: hidden;
+    will-change: transform;
+    grid-template-columns: repeat(auto-fit,
+        minmax(var(--min-product-card-width), max-content));
+    gap: 12px;
   }
 }

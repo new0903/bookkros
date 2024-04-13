@@ -72,7 +72,7 @@
       border-radius: 8px;
     }
     .BookInfo_content {
-      width: 300px;
+      width: 100%;
       flex: 1;
       padding: 0;
     }
@@ -123,4 +123,5 @@
     height: 100%;
     width: 100%;
   }
+
   
