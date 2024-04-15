@@ -1,4 +1,4 @@
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, WriteBar, WriteBarIcon, AdaptiveIconRenderer, usePlatform, SubnavigationBar, SubnavigationButton, CardGrid, Card } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, Group, Div, WriteBar, WriteBarIcon, AdaptiveIconRenderer, usePlatform, SubnavigationBar, SubnavigationButton } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import React, { useState } from 'react';
 import { Icon24Filter, Icon24SearchOutline, Icon24VoiceOutline, Icon28VoiceOutline } from '@vkontakte/icons';
@@ -76,6 +76,7 @@ export const Home = ({ id, fetchedUser }) => {
     <Panel id={id}>
       <PanelHeader>Найти книгу</PanelHeader>
       <Group>
+        <Div>
         <WriteBar
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -92,6 +93,7 @@ export const Home = ({ id, fetchedUser }) => {
           }
           placeholder="Название/автор/ISBN"
         />
+        </Div>
       </Group>
       <Group>
         <SubnavigationBar mode="horizontal" gap="m" stretched={false}>
@@ -112,11 +114,13 @@ export const Home = ({ id, fetchedUser }) => {
 
         </SubnavigationBar>
       </Group>
-      <Button size="s" appearance="accent" onClick={()=>{
+      <Div>
+        <Button size="s" appearance="accent" onClick={()=>{
         
         const id = books[Math.floor(Math.random() * books.length)].id
         routeNavigator.push(`/BookInfo?id=${id}`)
-      }}>Случайная книга</Button>
+        }}>Случайная книга</Button>
+      </Div>
       <Group>
         <Header mode="primary">Другие книги
           в вашем городе</Header>
