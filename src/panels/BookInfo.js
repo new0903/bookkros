@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import persik from '../assets/persik.png';
 import {
@@ -15,7 +15,11 @@ import {
     Cell,
     Avatar,
     FormItem, Text, MiniInfoCell,
-    ModalCard
+    ModalCard,
+    ModalPage,
+    ModalRoot,
+    ModalPageHeader,
+    Textarea
 } from '@vkontakte/vkui';
 //import './PlaceInfo.css'
 import { useSearchParams, useRouteNavigator, createBrowserRouter } from '@vkontakte/vk-mini-apps-router'
@@ -43,19 +47,28 @@ const ReportModal = ({ onClose, onSubmit }) => {
     };
 
     return (
-        <ModalCard style={{ width:'90%', marginBottom: 20, position:'center' }}>
-            <FormItem>
-                <textarea
-                    value={reason}
-                    onChange={handleReasonChange}
-                    placeholder="Пожалуйста, укажите причину репорта..."
-                />
-            </FormItem>
-            <Div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button size="l" onClick={handleSubmit}>Отправить</Button>
-                <Button size="l" mode="secondary" onClick={onClose}>Отмена</Button>
-            </Div>
-        </ModalCard>
+        <ModalRoot onClose={onClose}>
+            <ModalPage
+                id="report-modal"
+                onClose={onClose}
+                header={
+                    <ModalPageHeader
+                        left={<IconButton onClick={onClose} />}
+                        right={<Button onClick={handleSubmit}>Отправить</Button>}
+                    >
+                        Пожаловаться
+                    </ModalPageHeader>
+                }
+            >
+                <FormLayout>
+                    <Textarea
+                        value={reason}
+                        onChange={handleReasonChange}
+                        placeholder="Пожалуйста, укажите причину репорта..."
+                    />
+                </FormLayout>
+            </ModalPage>
+        </ModalRoot>
     );
 };
 
