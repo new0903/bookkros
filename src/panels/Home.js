@@ -76,24 +76,14 @@ export const Home = ({ id, fetchedUser }) => {
     <Panel id={id}>
       <PanelHeader>Найти книгу</PanelHeader>
       <Group>
+        <Div>
         <WriteBar
           value={text}
           onChange={(e) => setText(e.target.value)}
-          before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>}
-          after={
-            <>
-              <WriteBarIcon label="Фильтр">
-                {FilterIconForWriteBar}
-              </WriteBarIcon>
-              <WriteBarIcon label="Записать голосовое сообщение">
-                {VoiceOutlineIcon}
-              </WriteBarIcon>
-            </>
-          }
+          before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>} // это нужно вставить 
           placeholder="Название/автор/ISBN"
         />
-      </Group>
-      <Group>
+        </Div>
         <SubnavigationBar mode="horizontal" gap="m" stretched={false}>
           {janers.length > 0 &&
             janers.map((janer) => (

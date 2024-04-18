@@ -14,23 +14,52 @@ import {
     useAdaptivityWithJSMediaQueries,
     Cell,
     Avatar,
-    FormItem, Text, MiniInfoCell
+    FormItem, Text, MiniInfoCell,
+    ModalCard
 } from '@vkontakte/vkui';
 //import './PlaceInfo.css'
-import { useSearchParams, useRouteNavigator,createBrowserRouter } from '@vkontakte/vk-mini-apps-router'
-import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline, Icon24LikeOutline, Icon24Like } from '@vkontakte/icons';
+import { useSearchParams, useRouteNavigator, createBrowserRouter } from '@vkontakte/vk-mini-apps-router'
+import { Icon24HammerOutline, Icon24DeleteOutline, Icon24ReportOutline } from '@vkontakte/icons';
 //import { Likes } from '../api/setLikes';
 import axios from 'axios';
 import { $books, $bookId, setBookId, filterBooks } from '../store/book';
 import { $userServer } from '../store/user';
-import { getOneBook,deleteBookFx } from '../api/book';
+import { getOneBook, deleteBookFx } from '../api/book';
 import { useUnit } from 'effector-react';
 import './BookInfo.css'
 
+const ReportModal = ({ onClose, onSubmit }) => {
+    const [reason, setReason] = useState('');
 
+    const handleReasonChange = (event) => {
+        setReason(event.target.value);
+    };
+
+    const handleSubmit = () => {
+        if (reason.trim() !== '') {
+            onSubmit(reason);
+            onClose();
+        }
+    };
+
+    return (
+        <ModalCard style={{ width:'90%', marginBottom: 20, position:'center' }}>
+            <FormItem>
+                <textarea
+                    value={reason}
+                    onChange={handleReasonChange}
+                    placeholder="Пожалуйста, укажите причину репорта..."
+                />
+            </FormItem>
+            <Div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button size="l" onClick={handleSubmit}>Отправить</Button>
+                <Button size="l" mode="secondary" onClick={onClose}>Отмена</Button>
+            </Div>
+        </ModalCard>
+    );
+};
 
 export const BookInfo = ({ id, nav, fetchedUser }) => {
-
 
     const [params] = useSearchParams()
     const [book, setBook] = React.useState(null);
@@ -38,8 +67,8 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
     const routeNavigator = useRouteNavigator()
     //const bookId = useUnit($bookId);
     const idBook = Number(params.get('id') || 1);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     setBookId(idBook)
-
 
     React.useEffect(() => {
         const getCurrentTask = async () => {
@@ -49,8 +78,22 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
         getCurrentTask();
     }, [idBook]);
 
-
-
+    const handleReport = (reason) => {
+        const reportData = {
+            idBook: idBook,
+            reportedBy: fetchedUser.id,
+            messageReport: reason
+        };
+        submitReport(reportData);
+    };
+    const submitReport = async (reportData) => {
+        try {
+            // в беке нужно чтобы тут сохранялась жалоба 
+            await axios.post('бэкэнд_апи/жалоба', reportData);
+        } catch (error) {
+            console.error('Ошибка при отправке жалобы на книгу:', error);
+        }
+    };
 
 
     if (book) {
@@ -67,6 +110,7 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
             //console.log(PlaceCard.imgsFile)
         }
         return (
+
 
             <Panel id={id}>
                 <div className="BookInfoPage">
@@ -151,7 +195,7 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                 }
 
                             </div>
-                             {/* <div className="BookInfo_content_description">
+                            {/* <div className="BookInfo_content_description">
                                 {fetchedUser.id == selectBook.userInfo.id_vkontakte &&
                                     <div style={{ display: "flex", margin: "5px" }}>
 
@@ -177,12 +221,21 @@ export const BookInfo = ({ id, nav, fetchedUser }) => {
                                     </div>  
 
                             </div>*/}
-                                <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
-                            <Button size="s" appearance="accent" onClick={()=>{
-                            }}>
+                            <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
+                                <Button size="s" appearance="accent" onClick={() => {
+                                }}>
                                     Связаться с владельцем
-                            </Button>
-                                </a>
+                                </Button>
+                            </a>
+                            <div>
+                                <Icon24ReportOutline onClick={() => setIsReportModalOpen(true)} />
+                                {isReportModalOpen && (
+                                    <ReportModal
+                                        onClose={() => setIsReportModalOpen(false)}
+                                        onSubmit={handleReport}
+                                    />
+                                )}
+                            </div>
                         </div>
 
                     </Group>
