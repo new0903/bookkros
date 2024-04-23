@@ -15,8 +15,8 @@ export const setUserServerFx = createEffect(async (fetchedUser) => {
     formData.append('photo_200', fetchedUser.photo_200)
     formData.append('id', fetchedUser.id)
     const { data } = await api.post('adduser', formData);
-    console.log(data)
-    return data;
+  //  console.log(data)
+    return data.response;
 });
 export const setUserServerTown = createEffect(async (fetchedUserTown) => {
     // console.log("марш в хранилище")
@@ -29,5 +29,5 @@ export const setUserServerTown = createEffect(async (fetchedUserTown) => {
     formData.append('town', fetchedUserTown.town)
     formData.append('id', fetchedUserTown.id)
     const { data } = await api.post('setusertown', formData);
-    return data;
+    return data.response;
 });

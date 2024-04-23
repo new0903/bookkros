@@ -52,18 +52,22 @@ export const UserBook = ({ id, fetchedUser }) => {
     />
   );
   console.log(books)
-  return (
-    <Panel id={id}>
-      <Header mode="primary"
-        aside={
+
+  /*
+  aside={
           <IconButton onClick={() => {routeNavigator.push('/createBook')}}>
             <Icon28AddCircleFillBlue />
           </IconButton>
-        }>Список книг</Header>
-      {/* <Button size="s" appearance="accent" onClick={() => {
-              routeNavigator.push('/createBook')
-            }}>Добавить книгу</Button> */}
+        }
+  */
+  return (
+    <Panel id={id}>
+      <PanelHeader mode="primary"
+        >Список книг</PanelHeader>
       <Group>
+       <Button size="s" appearance="accent" onClick={() => {
+              routeNavigator.push('/createBook')
+            }}>Добавить книгу</Button> 
       
         <Div className='Books'>
         

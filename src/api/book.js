@@ -27,7 +27,7 @@ export const deleteBookFx = createEffect( async (id) => {
 });
 
 export const getOneBook = async (userId, bookId) => {
-    const {data}  = await api.get('getbook&idBook=' + bookId);
+    const {data}  = await api.get('getbook&idBook=' + bookId+'&userId='+userId);
     return data.response;
 }
 

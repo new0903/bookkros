@@ -14,26 +14,48 @@ import { $userServer } from '../store/user';
 import { $towns } from '../store/towns';
 
 export function Location({ id, fetchedUser }) {
-   
+
+    const [userServer] = useUnit([$userServer]);
+    console.log(userServer);
     const [value, setValue] = React.useState('');
     const [query, setQuery] = React.useState('');
 
-    const [cities, setCities] = React.useState([
-    ]);
-
     const [selectedCity, setSelectedCity] = React.useState([]);
+    const [serverCity, setServerCity] = React.useState([]);
     React.useEffect(() => {
         const getTown = async () => {
             const t = await getTowns();
-            
+
             setSelectedCity(() => t.map(town => ({ value: town.id, label: town.label })))
-          //  setSelectedCity(t)
+            setServerCity(t)
+
+            //  setSelectedCity(t)
             console.log(t)
-           // console.log(towns)
+            // console.log(towns)
 
         }
         getTown()
     }, []);
+
+    React.useEffect(() => {
+
+        const town = serverCity.find((town) => town.id == userServer.town_id)
+        if (town) {
+            //setQuery(town.label)
+            setValue(town.label)
+            setQuery(town.label)
+            console.log(town.label)
+            console.log(4)
+        }
+    }, [userServer,serverCity]);
+
+
+
+    React.useEffect(() => {
+    console.log(value)
+    }, [value]);
+
+
     const customSearchOptions = () => {
         console.log(3)
         const options = [...selectedCity];
@@ -61,8 +83,6 @@ export function Location({ id, fetchedUser }) {
         setQuery('');
     };
     const onCustomSearchInputChange = (e) => {
-        console.log(2)
-        console.log(e.target.value)
         setQuery(e.target.value);
     };
 
@@ -70,17 +90,20 @@ export function Location({ id, fetchedUser }) {
         option.label.toLowerCase().includes(value.toLowerCase());
 
 
-    const setUserTown =async (value)=>{
-        const data={
+    const setUserTown = async (value) => {
+        const data = {
             id: fetchedUser.id,
             town: value
         }
         console.log(data)
         setUserServerTown(data);
     }
+    if (userServer) {
+        
+   
     return (
         <>
-            
+
             <Panel id={id}>
                 <Div>
                     <Group style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
@@ -88,6 +111,8 @@ export function Location({ id, fetchedUser }) {
                             <CustomSelect
                                 value={value}
                                 placeholder="Введите название города"
+                                defaultValue={value}
+                                
                                 searchable
                                 options={customSearchOptions()}
                                 onInputChange={onCustomSearchInputChange}
@@ -102,7 +127,7 @@ export function Location({ id, fetchedUser }) {
                                 )}
                                 onChange={onCustomSearchChange}
                             />}
-                        <Button style={{marginTop:'10px'}}
+                        <Button style={{ marginTop: '10px' }}
                             size="l"
                             mode="primary"
 
@@ -111,7 +136,7 @@ export function Location({ id, fetchedUser }) {
                                 setUserTown(value)
                             }}
                         >
-                            Сохранить и продолжить 
+                            Сохранить и продолжить
                         </Button>
 
 
@@ -119,7 +144,7 @@ export function Location({ id, fetchedUser }) {
                 </Div>
             </Panel>
         </>
-    );
+    ); }
 }
 
 export default Location;

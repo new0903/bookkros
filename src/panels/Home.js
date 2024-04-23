@@ -16,7 +16,7 @@ import BookCard from '../Components/BookCard'
 
 export const Home = ({ id, fetchedUser }) => {
   const [books, userServer, janers] = useUnit([$books, $userServer, $janers]);
-  
+  console.log(userServer);
   const [text, setText] = useState('');
   const [janerId, setJanerId] = useState(0);
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
@@ -27,7 +27,7 @@ export const Home = ({ id, fetchedUser }) => {
     //const test2= await axios.get('https://russcazak10.ru/web/index.php?r=api/getbook').then(res=>res.data);
     // console.log(test2)
     // setTest(test2)
-    await getBookFx();
+    await getBookFx(fetchedUser.id);
   }
   const getJaners = async () => {
   
@@ -41,7 +41,7 @@ export const Home = ({ id, fetchedUser }) => {
 
     getBooks()
     getJaners()
-  }, []);
+  }, [fetchedUser]);
 
   const FilterIconForWriteBar = (
     <AdaptiveIconRenderer
@@ -70,15 +70,8 @@ export const Home = ({ id, fetchedUser }) => {
   }
 
   console.log(thematicsFilteredBook)
+/*
 
-
-  return (
-    <Panel id={id}>
-      <PanelHeader>Найти книгу</PanelHeader>
-      <Group>
-        <WriteBar
-          value={text}
-          onChange={(e) => setText(e.target.value)}
           before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>}
           after={
             <>
@@ -90,10 +83,20 @@ export const Home = ({ id, fetchedUser }) => {
               </WriteBarIcon>
             </>
           }
+*/
+
+  return (
+    <Panel id={id}>
+      <PanelHeader>Найти книгу</PanelHeader>
+      <Group>
+        <Div>
+        <WriteBar
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>} // это нужно вставить 
           placeholder="Название/автор/ISBN"
         />
-      </Group>
-      <Group>
+        </Div>
         <SubnavigationBar mode="horizontal" gap="m" stretched={false}>
           {janers.length > 0 &&
             janers.map((janer) => (
@@ -117,6 +120,7 @@ export const Home = ({ id, fetchedUser }) => {
         const id = books[Math.floor(Math.random() * books.length)].id
         routeNavigator.push(`/BookInfo?id=${id}`)
       }}>Случайная книга</Button>
+      
       <Group>
         <Header mode="primary">Другие книги
           в вашем городе</Header>

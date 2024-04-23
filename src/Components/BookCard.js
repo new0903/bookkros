@@ -1,6 +1,6 @@
 import React from 'react'
 import persik from '../assets/persik.png';
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, AdaptiveIconRenderer  } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar, AdaptiveIconRenderer } from '@vkontakte/vkui';
 import { setBookId } from '../store/book';
 import { useUnit } from 'effector-react';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router'
@@ -14,35 +14,48 @@ const BookCard = ({ Book, key }) => {
     //   console.log(key)
     let url = null
     if (Object.keys(Book.photo)) {
-        if(Book.photo.length>0){
+        if (Book.photo.length > 0) {
             url = Book.photo
         }
-        
+
         //console.log(PlaceCard.imgsFile)
     }
 
     return (
-        <div  className="BookCard" onClick={() => {
+        <div className="BookCard" onClick={() => {
             //setBookId(Book.id);
             routeNavigator.push(`/BookInfo?id=${id}`)//
         }}>
             {Book.isDamaged == 1 ? (
-                <div style={{position: 'absolute'}}>
-                        <Icon24WarningTriangleOutline style={{color:"#345fff",height:"36px",width:"36px"}}/>
-                {/* <AdaptiveIconRenderer IconCompact={Icon24WarningTriangleOutline} IconRegular={Icon28WarningTriangleOutline} /> */}
-            </div>
+                <div style={{ position: 'absolute' }}>
+                    <Icon24WarningTriangleOutline style={{ color: "#345fff", height: "36px", width: "36px" }} />
+                    {/* <AdaptiveIconRenderer IconCompact={Icon24WarningTriangleOutline} IconRegular={Icon28WarningTriangleOutline} /> */}
+                </div>
             ) : (<></>)
             }
             <div className="BookCard_preview">
                 <picture className="BookCard_preview_picture">
-                    <source srcSet={url} type="image/webp"></source>
-                    {url&& <img
-                        src={url}
-                        alt=""
-                        width={MAX_PRODUCT_CARD_SIZE}
-                        height={MAX_PRODUCT_CARD_SIZE}
-                        className="BookCard_preview_picture_photo BookCard_preview_picture_photo__unload"
-                    />}
+                    {url ?
+                        (<><source srcSet={url} type="image/webp"></source>
+                            <img
+                                src={url}
+                                alt=""
+                                width={MAX_PRODUCT_CARD_SIZE}
+                                height={MAX_PRODUCT_CARD_SIZE}
+                                className="BookCard_preview_picture_photo BookCard_preview_picture_photo__unload"
+                            /></>)
+                        :
+                        (<><source srcSet={persik} type="image/webp"></source>
+                            <img
+                                src={persik}
+                                alt=""
+                                style={{opacity:0}}
+                                width={MAX_PRODUCT_CARD_SIZE}
+                                height={MAX_PRODUCT_CARD_SIZE}
+                                className="BookCard_preview_picture_photo BookCard_preview_picture_photo__unload"
+                            /></>)
+                    }
+
                 </picture>
                 <div style={{ position: "absolute", display: "flex", alignItems: "flex-end", height: "210px" }}>
                     <div>
