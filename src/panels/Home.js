@@ -30,7 +30,7 @@ export const Home = ({ id, fetchedUser }) => {
     await getBookFx(fetchedUser.id);
   }
   const getJaners = async () => {
-  
+
     // const test2=  await getBookFx(123);
     //const test2= await axios.get('https://russcazak10.ru/web/index.php?r=api/getbook').then(res=>res.data);
     // console.log(test2)
@@ -66,47 +66,47 @@ export const Home = ({ id, fetchedUser }) => {
   );
   if (janerId != 0) {
     console.log(janerId)
-    thematicsFilteredBook = thematicsFilteredBook.filter(({ janer }) => janer.find((elem)=>janerId==elem.id) )
+    thematicsFilteredBook = thematicsFilteredBook.filter(({ janer }) => janer.find((elem) => janerId == elem.id))
   }
 
   console.log(thematicsFilteredBook)
-/*
-
-          before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>}
-          after={
-            <>
-              <WriteBarIcon label="Фильтр">
-                {FilterIconForWriteBar}
-              </WriteBarIcon>
-              <WriteBarIcon label="Записать голосовое сообщение">
-                {VoiceOutlineIcon}
-              </WriteBarIcon>
-            </>
-          }
-*/
+  /*
+  
+            before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>}
+            after={
+              <>
+                <WriteBarIcon label="Фильтр">
+                  {FilterIconForWriteBar}
+                </WriteBarIcon>
+                <WriteBarIcon label="Записать голосовое сообщение">
+                  {VoiceOutlineIcon}
+                </WriteBarIcon>
+              </>
+            }
+  */
 
   return (
     <Panel id={id}>
       <PanelHeader>Найти книгу</PanelHeader>
       <Group>
         <Div>
-        <WriteBar
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>} // это нужно вставить 
-          placeholder="Название/автор/ISBN"
-        />
+          <WriteBar
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            before={<WriteBarIcon > <Icon24SearchOutline /> </WriteBarIcon>} // это нужно вставить 
+            placeholder="Название/автор/ISBN"
+          />
         </Div>
         <SubnavigationBar mode="horizontal" gap="m" stretched={false}>
           {janers.length > 0 &&
             janers.map((janer) => (
               <SubnavigationButton
                 selected={janerId === janer.id}
-                onClick={()=>{
+                onClick={() => {
                   setJanerId(janer.id)
                 }}
                 key={janer.id}
-                >
+              >
                 {janer.name}
               </SubnavigationButton>
             )
@@ -115,12 +115,13 @@ export const Home = ({ id, fetchedUser }) => {
 
         </SubnavigationBar>
       </Group>
-      <Button size="s" appearance="accent" onClick={()=>{
-        
-        const id = books[Math.floor(Math.random() * books.length)].id
-        routeNavigator.push(`/BookInfo?id=${id}`)
-      }}>Случайная книга</Button>
-      
+      <Div>
+        <Button size="s" appearance="accent" onClick={() => {
+
+          const id = books[Math.floor(Math.random() * books.length)].id
+          routeNavigator.push(`/BookInfo?id=${id}`)
+        }}>Случайная книга</Button>
+      </Div>
       <Group>
         <Header mode="primary">Другие книги
           в вашем городе</Header>

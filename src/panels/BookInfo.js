@@ -14,11 +14,12 @@ import {
     useAdaptivityWithJSMediaQueries,
     Cell,
     Avatar,
-    FormItem, Text, MiniInfoCell,ModalCard,ModalRoot,ModalPage,ModalPageHeader,FormLayoutGroup,Textarea
+    FormItem, Text, MiniInfoCell, ModalCard, ModalRoot, ModalPage, ModalPageHeader, FormLayoutGroup, Textarea,
+    Tooltip
 } from '@vkontakte/vkui';
 //import './PlaceInfo.css'
 import { useSearchParams, useRouteNavigator, createBrowserRouter } from '@vkontakte/vk-mini-apps-router'
-import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline, Icon24LikeOutline, Icon24Like,Icon24ReportOutline } from '@vkontakte/icons';
+import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline, Icon24LikeOutline, Icon24Like, Icon24ReportOutline } from '@vkontakte/icons';
 //import { Likes } from '../api/setLikes';
 import axios from 'axios';
 import { $books, $bookId, setBookId, filterBooks } from '../store/book';
@@ -126,6 +127,12 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                 <div className="BookInfoPage">
                     <Group>
                         <div className="BookInfo">
+                            <div  style={{ position: 'absolute' }}>
+                                <Tooltip text="Пожаловаться">
+                                    <Icon24ReportOutline style={{ color: "#345fff", height: "36px", width: "36px" }} onClick={() => setActiveModal("report")} />
+                                </Tooltip>
+                            </div>
+
                             {imgs &&
                                 <Gallery
                                     showArrows
@@ -212,38 +219,32 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                 fetchedUser.id == selectBook.userInfo.id_vkontakte ?
                                     (
                                         <>
-                                            <Button size="s" appearance="accent" onClick={() => {
-                                                routeNavigator.push(`/editBook?id=${selectBook.id}`)
-                                            }}>редактировать</Button>
-                                            <Button size="s" appearance="accent" mode="secondary" onClick={async () => {
-
-                                                await deleteBookFx(idBook)
-                                                routeNavigator.push('/');
-                                            }}>удалить</Button> 
+                                            <FormItem >
+                                                <Button style={{ marginBottom: '12px' }} size="s" appearance="accent" onClick={() => {
+                                                    routeNavigator.push(`/editBook?id=${selectBook.id}`)
+                                                }}>редактировать</Button>
+                                                <Button size="s" appearance="accent" mode="secondary" onClick={async () => {
+                                                    await deleteBookFx(idBook)
+                                                    routeNavigator.push('/');
+                                                }}>удалить</Button>
+                                            </FormItem>
                                         </>
                                     )
 
                                     : (<>
-                                    <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
-                                        <Button size="s" appearance="accent" onClick={() => {
-                                        }}>
-                                            Связаться с владельцем
-                                        </Button>
-                                    </a>
-                                    <div>
-                                    <Icon24ReportOutline onClick={() => setActiveModal("report")} />
-                                    
-                                </div>
-                                </>
-                                
-                                )
+                                        <FormItem >
+                                            <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
+                                                <Button size="s" appearance="accent" onClick={() => {
+                                                }}>
+                                                    Связаться с владельцем
+                                                </Button>
+                                            </a>
+                                        </FormItem>
+                                    </>
+
+                                    )
                             }
-
                         </div>
-
-
-
-
                     </Group>
 
                 </div>

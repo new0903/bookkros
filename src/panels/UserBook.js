@@ -6,7 +6,7 @@ import { useUnit } from 'effector-react';
 import { $books } from '../store/book';
 import { $janers } from '../store/janer';
 import { $userServer } from '../store/user';
-import { getBookFx,getUserBookFx } from '../api/book';
+import { getBookFx, getUserBookFx } from '../api/book';
 import { getJaner } from '../api/requests';
 import axios from 'axios';
 import './Home.css'
@@ -63,24 +63,25 @@ export const UserBook = ({ id, fetchedUser }) => {
   return (
     <Panel id={id}>
       <PanelHeader mode="primary"
-        >Список книг</PanelHeader>
+      >Список книг</PanelHeader>
       <Group>
-       <Button size="s" appearance="accent" onClick={() => {
-              routeNavigator.push('/createBook')
-            }}>Добавить книгу</Button> 
-      
+        <Div>
+          <Button size="s" appearance="accent" onClick={() => {
+            routeNavigator.push('/createBook')
+          }}>Добавить книгу</Button>
+        </Div>
         <Div className='Books'>
-        
+
           {books.length > 0 ? (
-            
+
             <div className='Books_grid'>
-              
+
               {books.map((book) => (
                 <BookCard Book={book} />
               ))}
             </div>
           ) : (<FormItem>
-            
+
             <div>Здесь пока нет ни одной книги, которую вы хотели бы отдать. Подарите свою первую книгу другому. </div>
           </FormItem>)
           }
