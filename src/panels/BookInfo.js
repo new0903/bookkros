@@ -127,18 +127,17 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                 <div className="BookInfoPage">
                     <Group>
                         <div className="BookInfo">
-                        <div style={{ position: 'relative', marginBottom: '10px' }}>
+                            <div style={{ position: 'relative', marginBottom: '10px' }}>
                                 <Tooltip text="Пожаловаться">
                                     <Icon24ReportOutline style={{
-                                            position: 'absolute',
-                                            top: '10px',
-                                            right: '10px',
-                                            color: '#345fff',
-                                            zIndex: '1',
-                                        }} onClick={() => setActiveModal("report")} />
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                        color: '#345fff',
+                                        zIndex: '1',
+                                    }} onClick={() => setActiveModal("report")} />
                                 </Tooltip>
                             </div>
-
                             {imgs &&
                                 <Gallery
                                     showArrows
@@ -176,7 +175,7 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                     {selectBook.autor.name_autor}
                                 </MiniInfoCell >
                             </FormItem>
-                            <FormItem style={{ display: "flex", margin: "5px", flexDirection: 'column' }}>
+                            <FormItem style={{ display: "flex", flexDirection: 'column' }}>
                                 <Text>Жанр</Text>
                                 <MiniInfoCell style={{ padding: '0' }}>
                                     {selectBook.janer.map((janer) => {
@@ -184,7 +183,7 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                     })}
                                 </MiniInfoCell>
                             </FormItem>
-                            <FormItem className='content'>
+                            <FormItem>
                                 <Text style={{ paddingBottom: '5px' }}>Описание</Text>
                                 <Text>
                                     {selectBook.description ? selectBook.description : ''}
@@ -225,32 +224,38 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                 fetchedUser.id == selectBook.userInfo.id_vkontakte ?
                                     (
                                         <>
-                                            <FormItem >
-                                                <Button style={{ marginBottom: '12px' }} size="s" appearance="accent" onClick={() => {
+                                            <Button size="xl"
+                                                stretched onClick={() => {
                                                     routeNavigator.push(`/editBook?id=${selectBook.id}`)
                                                 }}>редактировать</Button>
-                                                <Button size="s" appearance="accent" mode="secondary" onClick={async () => {
+                                            <Button size="xl"
+                                                stretched mode="secondary" onClick={async () => {
+
                                                     await deleteBookFx(idBook)
                                                     routeNavigator.push('/');
                                                 }}>удалить</Button>
-                                            </FormItem>
                                         </>
                                     )
 
                                     : (<>
-                                        <FormItem >
-                                            <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
-                                                <Button size="s" appearance="accent" onClick={() => {
+                                        <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
+                                            <Button size="xl"
+                                                stretched appearance="accent" onClick={() => {
                                                 }}>
-                                                    Связаться с владельцем
-                                                </Button>
-                                            </a>
-                                        </FormItem>
+                                                Связаться с владельцем
+                                            </Button>
+                                        </a>
+
                                     </>
 
                                     )
                             }
+
                         </div>
+
+
+
+
                     </Group>
 
                 </div>

@@ -93,10 +93,11 @@ export function Location({ id, fetchedUser }) {
     const setUserTown = async (value) => {
         const data = {
             id: fetchedUser.id,
-            town: value
+            town: value.value
         }
         console.log(data)
         setUserServerTown(data);
+        setValue(value.label);
     }
     if (userServer) {
         

@@ -114,14 +114,17 @@ export const Home = ({ id, fetchedUser }) => {
           }
 
         </SubnavigationBar>
-      </Group>
-      <Div>
-        <Button size="s" appearance="accent" onClick={() => {
+        <Div style={{ padding: '8px' }}>
+          <Button size="xl"
+            mode="primary"
+            stretched onClick={() => {
 
-          const id = books[Math.floor(Math.random() * books.length)].id
-          routeNavigator.push(`/BookInfo?id=${id}`)
-        }}>Случайная книга</Button>
-      </Div>
+              const id = books[Math.floor(Math.random() * books.length)].id
+              routeNavigator.push(`/BookInfo?id=${id}`)
+            }}>Случайная книга</Button>
+        </Div>
+      </Group>
+
       <Group>
         <Header mode="primary">Другие книги
           в вашем городе</Header>
