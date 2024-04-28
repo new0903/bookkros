@@ -127,9 +127,15 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                 <div className="BookInfoPage">
                     <Group>
                         <div className="BookInfo">
-                            <div  style={{ position: 'absolute' }}>
+                        <div style={{ position: 'relative', marginBottom: '10px' }}>
                                 <Tooltip text="Пожаловаться">
-                                    <Icon24ReportOutline style={{ color: "#345fff", height: "36px", width: "36px" }} onClick={() => setActiveModal("report")} />
+                                    <Icon24ReportOutline style={{
+                                            position: 'absolute',
+                                            top: '10px',
+                                            right: '10px',
+                                            color: '#345fff',
+                                            zIndex: '1',
+                                        }} onClick={() => setActiveModal("report")} />
                                 </Tooltip>
                             </div>
 
