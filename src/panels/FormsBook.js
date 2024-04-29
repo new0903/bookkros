@@ -298,8 +298,7 @@ export const EditBook = ({ id, nav, fetchedUser }) => {
                                     console.log(e.target.checked)
                                 }}>в книге есть повреждения</Checkbox>
                             </FormItem>
-
-                            <FormItem top="Обновить">
+                            <FormItem>
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)
@@ -481,8 +480,6 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </FormItem>
-
-
                             <FormItem
                                 htmlFor="colorsWithoutButton"
                                 top="Выберите жанры"
@@ -518,9 +515,7 @@ export const AddBook = ({ id, nav, fetchedUser }) => {
                             <FormItem>
                                 <div>{photoUrl ? <img src={photoUrl} style={{ maxWidth: '100%', maxHeight: '100%' }} /> : null}</div>
                             </FormItem>
-
-
-                            <FormItem top="Загрузить книгу">
+                            <FormItem>
                                 <Button size="s" align='center' mode="secondary" onClick={() => {
                                     // if (!dataSend) {
                                     //  setDataSend(!dataSend)

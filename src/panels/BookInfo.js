@@ -14,11 +14,11 @@ import {
     useAdaptivityWithJSMediaQueries,
     Cell,
     Avatar,
-    FormItem, Text, MiniInfoCell,ModalCard,ModalRoot,ModalPage,ModalPageHeader,FormLayoutGroup,Textarea
+    FormItem, Text, MiniInfoCell, ModalCard, ModalRoot, ModalPage, ModalPageHeader, FormLayoutGroup, Textarea,Tooltip,usePlatform
 } from '@vkontakte/vkui';
 //import './PlaceInfo.css'
 import { useSearchParams, useRouteNavigator, createBrowserRouter } from '@vkontakte/vk-mini-apps-router'
-import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline, Icon24LikeOutline, Icon24Like,Icon24ReportOutline } from '@vkontakte/icons';
+import { Icon24HammerOutline, Icon24DeleteOutline, Icon16Like, Icon16LikeOutline, Icon24LikeOutline, Icon24Like, Icon24ReportOutline } from '@vkontakte/icons';
 //import { Likes } from '../api/setLikes';
 import axios from 'axios';
 import { $books, $bookId, setBookId, filterBooks } from '../store/book';
@@ -27,64 +27,10 @@ import { getOneBook, deleteBookFx } from '../api/book';
 import { useUnit } from 'effector-react';
 import './BookInfo.css'
 
-
-
-// export const ReportModal = ({ onClose, onSubmit,setActiveModal }) => {
-//     const [reason, setReason] = React.useState('');
-
-//     const handleReasonChange = (event) => {
-//         setReason(event.target.value);
-//     };
-
-//     const handleSubmit = () => {
-//         if (reason.trim() !== '') {
-//             onSubmit(reason);
-//             onClose();
-//             setActiveModal(null)
-//         }
-//     };
-
-//     return (
-//         <ModalRoot onClose={onClose} activeModal="ReportModal">
-//             <ModalPage
-//                 id="ReportModal"
-//                 onClose={onClose}
-//                 header={
-//                     <ModalPageHeader
-//                         left={<IconButton onClick={onClose} />}
-//                         right={<Button onClick={handleSubmit}>Отправить</Button>}
-//                     >
-//                         Пожаловаться
-//                     </ModalPageHeader>
-//                 }
-//             >
-//                 <FormLayoutGroup>
-//                     <Textarea
-//                         value={reason}
-//                         onChange={handleReasonChange}
-//                         placeholder="Пожалуйста, укажите причину репорта..."
-//                     />
-//                 </FormLayoutGroup>
-//             </ModalPage>
-//         </ModalRoot>
-//         // <ModalCard style={{ width:'90%', marginBottom: 20, position:'center' }}>
-//         //     <FormItem>
-//         //         <textarea
-//         //             value={reason}
-//         //             onChange={handleReasonChange}
-//         //             placeholder="Пожалуйста, укажите причину репорта..."
-//         //         />
-//         //     </FormItem>
-//         //     <Div style={{ display: 'flex', justifyContent: 'space-between' }}>
-//         //         <Button size="l" onClick={handleSubmit}>Отправить</Button>
-//         //         <Button size="l" mode="secondary" onClick={onClose}>Отмена</Button>
-//         //     </Div>
-//         // </ModalCard>
-//     );
-// };
 export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
 
 
+    const platform = usePlatform();
     const [params] = useSearchParams()
     const [book, setBook] = React.useState(null);
     const userServer = useUnit($userServer);
@@ -120,12 +66,25 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
 
             //console.log(PlaceCard.imgsFile)
         }
+
+        const styles={position:"absolute",zIndex:'100'}
+
         return (
 
             <Panel id={id}>
                 <div className="BookInfoPage">
                     <Group>
                         <div className="BookInfo">
+                            <div style={platform==="ios"||platform==="android"? styles:{}} >
+                                <Tooltip text="Пожаловаться">
+                                    <Icon24ReportOutline style={{
+                                        top: '10px',
+                                        right: '10px',
+                                        color: '#345fff',
+                                        zIndex: '1',
+                                    }} onClick={() => setActiveModal("report")} />
+                                </Tooltip>
+                            </div>
                             {imgs &&
                                 <Gallery
                                     showArrows
@@ -163,7 +122,7 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                     {selectBook.autor.name_autor}
                                 </MiniInfoCell >
                             </FormItem>
-                            <FormItem style={{ display: "flex", margin: "5px", flexDirection: 'column' }}>
+                            <FormItem style={{ display: "flex", flexDirection: 'column' }}>
                                 <Text>Жанр</Text>
                                 <MiniInfoCell style={{ padding: '0' }}>
                                     {selectBook.janer.map((janer) => {
@@ -171,7 +130,7 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                     })}
                                 </MiniInfoCell>
                             </FormItem>
-                            <FormItem className='content'>
+                            <FormItem>
                                 <Text style={{ paddingBottom: '5px' }}>Описание</Text>
                                 <Text>
                                     {selectBook.description ? selectBook.description : ''}
@@ -212,31 +171,31 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
                                 fetchedUser.id == selectBook.userInfo.id_vkontakte ?
                                     (
                                         <>
-                                            <Button size="s" appearance="accent" onClick={() => {
-                                                routeNavigator.push(`/editBook?id=${selectBook.id}`)
-                                            }}>редактировать</Button>
-                                            <Button size="s" appearance="accent" mode="secondary" onClick={async () => {
+                                            <Button size="xl"
+                                                stretched onClick={() => {
+                                                    routeNavigator.push(`/editBook?id=${selectBook.id}`)
+                                                }}>редактировать</Button>
+                                            <Button size="xl"
+                                                stretched mode="secondary" onClick={async () => {
 
-                                                await deleteBookFx(idBook)
-                                                routeNavigator.push('/');
-                                            }}>удалить</Button> 
+                                                    await deleteBookFx(idBook)
+                                                    routeNavigator.push('/');
+                                                }}>удалить</Button>
                                         </>
                                     )
 
                                     : (<>
-                                    <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
-                                        <Button size="s" appearance="accent" onClick={() => {
-                                        }}>
-                                            Связаться с владельцем
-                                        </Button>
-                                    </a>
-                                    <div>
-                                    <Icon24ReportOutline onClick={() => setActiveModal("report")} />
-                                    
-                                </div>
-                                </>
-                                
-                                )
+                                        <a target="_blank" rel="noopener noreferrer" href={`https://vk.com/id${selectBook.userInfo.id_vkontakte}`}>
+                                            <Button size="xl"
+                                                stretched appearance="accent" onClick={() => {
+                                                }}>
+                                                Связаться с владельцем
+                                            </Button>
+                                        </a>
+
+                                    </>
+
+                                    )
                             }
 
                         </div>
@@ -256,7 +215,6 @@ export const BookInfo = ({ id, nav, fetchedUser, setActiveModal }) => {
 
         </Panel>
     )
-
 
 }
 

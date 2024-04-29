@@ -15,6 +15,7 @@ import { $towns } from '../store/towns';
 
 export function Location({ id, fetchedUser }) {
 
+
     const [userServer] = useUnit([$userServer]);
     console.log(userServer);
     const [value, setValue] = React.useState('');
@@ -93,58 +94,59 @@ export function Location({ id, fetchedUser }) {
     const setUserTown = async (value) => {
         const data = {
             id: fetchedUser.id,
-            town: value
+            town: value.value
         }
         console.log(data)
         setUserServerTown(data);
+        setValue(value.label);
     }
     if (userServer) {
         
    
-    return (
-        <>
-
-            <Panel id={id}>
-                <Div>
-                    <Group style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-                        {selectedCity.length > 0 &&
-                            <CustomSelect
-                                value={value}
-                                placeholder="Введите название города"
-                                defaultValue={value}
-                                
-                                searchable
-                                options={customSearchOptions()}
-                                onInputChange={onCustomSearchInputChange}
-                                autoHideScrollbar
-                                renderOption={({ option, ...restProps }) => (
-                                    <CustomSelectOption
-                                        style={option.value === '0' ? { color: 'var(--vkui--color_background_accent)' } : {}}
-                                        {...restProps}
-                                    >
-                                        {option.label}
-                                    </CustomSelectOption>
-                                )}
-                                onChange={onCustomSearchChange}
-                            />}
-                        <Button style={{ marginTop: '10px' }}
-                            size="l"
-                            mode="primary"
-
-                            onClick={() => {
-
-                                setUserTown(value)
-                            }}
-                        >
-                            Сохранить и продолжить
-                        </Button>
-
-
-                    </Group>
-                </Div>
-            </Panel>
-        </>
-    ); }
+        return (
+            <>
+    
+                <Panel id={id}>
+                    <Div>
+                        <Group style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+                            {selectedCity.length > 0 &&
+                                <CustomSelect
+                                    value={value}
+                                    placeholder="Введите название города"
+                                    defaultValue={value}
+                                    
+                                    searchable
+                                    options={customSearchOptions()}
+                                    onInputChange={onCustomSearchInputChange}
+                                    autoHideScrollbar
+                                    renderOption={({ option, ...restProps }) => (
+                                        <CustomSelectOption
+                                            style={option.value === '0' ? { color: 'var(--vkui--color_background_accent)' } : {}}
+                                            {...restProps}
+                                        >
+                                            {option.label}
+                                        </CustomSelectOption>
+                                    )}
+                                    onChange={onCustomSearchChange}
+                                />}
+                            <Button style={{ marginTop: '10px' }}
+                                size="l"
+                                mode="primary"
+    
+                                onClick={() => {
+    
+                                    setUserTown(value)
+                                }}
+                            >
+                                Сохранить и продолжить
+                            </Button>
+    
+    
+                        </Group>
+                    </Div>
+                </Panel>
+            </>
+        );}
 }
 
 export default Location;
